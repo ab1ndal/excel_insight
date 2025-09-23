@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+
+# Environments
+.venv/
+venv/
+.env
+*.env
+
+# Streamlit
+.streamlit/
+
+# Local configs
+.excel_configs.json
+.insight_payload.json
+
+# OS
+.DS_Store
+Thumbs.db
