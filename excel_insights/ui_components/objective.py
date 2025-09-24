@@ -78,6 +78,7 @@ def objective_dashboard():
     else:
         specify_objective()
         col1, col2, col3 = st.columns(3)
+        
         with col1:
             if st.button("💾 Save Objective"):
                 save_payload(st.session_state["insight_spec"])
