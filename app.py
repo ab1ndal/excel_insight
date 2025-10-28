@@ -4,7 +4,7 @@ from pathlib import Path
 from excel_insights.parser import parse_excel_sheet
 from excel_insights.ui_components.config_manager import apply_configs_to_state, save_configs, load_configs
 from excel_insights.ui_components.objective import objective_dashboard
-from excel_insights.ui_components.insight import specify_insight
+#from excel_insights.ui_components.insight import specify_insight
 import json
 
 
@@ -157,4 +157,4 @@ with tabs[1]:
 
 with tabs[2]:
     st.header("Insights")
-    specify_insight()
+    #specify_insight()

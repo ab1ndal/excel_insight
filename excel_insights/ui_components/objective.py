@@ -1,6 +1,8 @@
 import streamlit as st
 from pathlib import Path
 import json
+from excel_insights.nodes.guardrail import guardrail_check
+from excel_insights.nodes.create_agent import agent
 
 DEFAULT_PAYLOAD_FILE = Path(".insight_payload.json")
 
@@ -58,7 +60,7 @@ def specify_objective():
 
         st.session_state["insight_spec"] = {
             "objective": user_objective.strip() if user_objective else "Derive insights from the data",
-            "grid": f"Dashboard grid: {rows} x {cols}",
+            "grid": {"rows": rows, "columns": cols},
             "tables": table_context,
         }
         st.success("✅ Saved insight specification")
@@ -77,7 +79,7 @@ def objective_dashboard():
         st.info("Please parse some tables first in the 📂 File Uploads tab.")
     else:
         specify_objective()
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         
         with col1:
             if st.button("💾 Save Objective"):
@@ -94,3 +96,14 @@ def objective_dashboard():
                     mime="application/json",
                 )
         show_objective()
+        with col4:
+            if st.button("Generate Insights"):
+                if st.session_state["insight_spec"]:
+                    if not guardrail_check(st.session_state["insight_spec"]["objective"]):
+                        st.error("❌ Objective fails guardrail checks")
+                    else:
+                        with st.spinner("Generating insights..."):
+                            result = agent.run(st.session_state["insight_spec"])
+                            plans = result.output
+                            st.session_state["plans"] = plans
+                            st.success("✅ Insights generated")
