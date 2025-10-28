@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 from excel_insights.nodes.guardrail import guardrail_check
 from excel_insights.nodes.create_agent import agent
+from excel_insights.nodes.schemas import PlannerInput, Grid, TableItem
 
 DEFAULT_PAYLOAD_FILE = Path(".insight_payload.json")
 
@@ -35,8 +36,7 @@ def specify_objective():
         rows = st.number_input("Number of rows", min_value=1, max_value=5, value=2, step=1)
     with col2:
         cols = st.number_input("Number of columns", min_value=1, max_value=5, value=2, step=1)
-
-    grid_shape = (rows, cols)
+        
     st.write(f"Dashboard grid: {rows} x {cols}")
 
     st.markdown("### Define Your Objective")
@@ -46,23 +46,28 @@ def specify_objective():
     )
 
     if st.button("Confirm Objective & Layout"):
-        table_context = {}
+        table_context = []
         for key, tbl in st.session_state["tables"].items():
             # Keep it light: only show first 5 rows
             sample = tbl["data"].head(5).to_pandas().to_dict(orient="records")
 
-            table_context[key] = {
-                "table_name": tbl.get("table_name"),
-                "headers": tbl.get("headers"),
-                "units": tbl.get("units"),
-                "sample": sample,
-            }
+            table_context.append(
+                TableItem(
+                    key=key,
+                    table_name=tbl.get("table_name"),
+                    headers=tbl.get("headers"),
+                    units=tbl.get("units"),
+                    sample_rows=sample,
+                )
+            )
+        
+        grid = Grid(rows=rows, columns=cols)
 
-        st.session_state["insight_spec"] = {
-            "objective": user_objective.strip() if user_objective else "Derive insights from the data",
-            "grid": {"rows": rows, "columns": cols},
-            "tables": table_context,
-        }
+        st.session_state["insight_spec"] = PlannerInput(
+            objective=user_objective.strip() if user_objective else "Derive insights from the data",
+            grid=grid,
+            tables=table_context,
+        )
         st.success("✅ Saved insight specification")
 
 def show_objective():
