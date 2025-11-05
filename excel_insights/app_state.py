@@ -1,16 +1,24 @@
 # graph.py
 from langgraph.graph import StateGraph, END
-from typing import TypedDict, List, Dict, Any
+from typing import TypedDict, List, Dict, Any, Optional, Literal
 
 # Define the global state
 class AppState(TypedDict, total=False):
+    # Insight Specification
     objective: str
-    grid: str
-    tables: Dict[str, Any]
+    grid: Dict[str, int]
+    tables: List[Dict[str, Any]]
+
+    # Planner Output
     plans: List[Dict[str, Any]]
     codes: List[str]
     plots: List[Any]
-    history: Dict[str, List[str]]  # for Editor undo functionality
+
+    # Editor Output
+    edit_request: Optional[List[str]] = None
+    edit_status: List[Literal["ok", "blocked", "planned", "coded", "edited", "failed"]] = []
+    edit_error: Optional[List[str]] = None
+    edit_history: Dict[str, List[str]]  # for Editor undo functionality
 
 def build_graph():
     workflow = StateGraph(AppState)

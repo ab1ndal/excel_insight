@@ -49,25 +49,33 @@ def specify_objective():
         table_context = []
         for key, tbl in st.session_state["tables"].items():
             # Keep it light: only show first 5 rows
-            sample = tbl["data"].head(5).to_pandas().to_dict(orient="records")
+            sample_dict = tbl["data"].head(5).to_pandas().to_dict(orient="records")
+            headers = tbl.get("headers")
+
+            if not headers and sample_dict:
+                headers = list(sample_dict[0].keys())
+
+            rows_list = [[str(rec.get(h, "")) for h in headers] for rec in sample_dict]
 
             table_context.append(
-                TableItem(
-                    key=key,
-                    table_name=tbl.get("table_name"),
-                    headers=tbl.get("headers"),
-                    units=tbl.get("units"),
-                    sample_rows=sample,
-                )
+                {
+                    "key": key,
+                    "table_name": tbl.get("table_name"),
+                    "headers": headers,
+                    "units": tbl.get("units"),
+                    "sample_rows": rows_list,
+                }
             )
         
-        grid = Grid(rows=rows, columns=cols)
+        grid = {"rows": rows, "columns": cols}
 
-        st.session_state["insight_spec"] = PlannerInput(
-            objective=user_objective.strip() if user_objective else "Derive insights from the data",
-            grid=grid,
-            tables=table_context,
-        )
+        spec_model = {
+            "objective": user_objective.strip() if user_objective else "Derive insights from the data",
+            "grid": grid,
+            "tables": table_context,
+        }
+        print(spec_model)
+        st.session_state["insight_spec"] = spec_model
         st.success("✅ Saved insight specification")
 
 def show_objective():

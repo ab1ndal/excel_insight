@@ -1,5 +1,6 @@
-# excel_insights/nodes/guardrail.py
+# excel_insights/graph/nodes/guardrail.py
 from excel_insights.config import client
+from excel_insights.graph.state import AppState
 
 def guardrail_check(text: str) -> bool:
     mod = client.moderations.create(

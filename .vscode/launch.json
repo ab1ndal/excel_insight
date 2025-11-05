@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Streamlit (Poetry)",
+      "type": "python",
+      "request": "launch",
+      "module": "streamlit",
+      "args": ["run", "app.py"],
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}",
+      "python": "C:\\Users\\abindal\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\excel-insights-qDR7KouP-py3.11\\Scripts\\python.exe"
+    }
+  ]
+}

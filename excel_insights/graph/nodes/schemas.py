@@ -1,6 +1,6 @@
 # excel_insights/nodes/schemas.py
-from pydantic import BaseModel
-from typing import List, Literal, Optional
+from pydantic import BaseModel, Field
+from typing import List, Literal, Optional, Dict, Any
 
 # -------- Inputs ---------
 class Grid(BaseModel):
@@ -10,9 +10,9 @@ class Grid(BaseModel):
 class TableItem(BaseModel):
     key: str
     table_name: Optional[str] = None
-    headers: List[str]
-    units: List[str]
-    sample_rows: List[List[str]] = []
+    headers: Optional[List[str]] = None
+    units: Optional[List[str]] = None
+    sample_rows: List[List[str]] = Field(default_factory=list)
 
 # -------- Planner --------
 class PlannerInput(BaseModel):
@@ -44,7 +44,7 @@ class EditInput(BaseModel):
     current_code: str
     history: List[str]
     edit_request: str
-    
+
 class EditResponse(BaseModel):
     action: Literal["modify_code", "replan", "regenerate"]
     code: Optional[str] = None
