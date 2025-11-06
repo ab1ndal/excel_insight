@@ -1,3 +1,4 @@
+# excel_insights/graph/state.py
 from typing import TypedDict, List, Dict, Optional, Any, Literal
 
 class AppState(TypedDict, total=False):

@@ -1,13 +1,13 @@
+# excel_insights/graph/build.py
+
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
-from state import AppState
-from nodes.guardrail import guardrail_node
-from nodes.plan import plan_node
-from nodes.codegen import codegen_node
-from nodes.execute import execute_node
-from nodes.edit import edit_node
-
-
+from .state import AppState
+from excel_insights.graph.nodes import guardrail_node
+from excel_insights.graph.nodes import plan_node
+from excel_insights.graph.nodes import codegen_node
+from excel_insights.graph.nodes import execute_node
+from excel_insights.graph.nodes import edit_node
 
 def build_graph():
     """
